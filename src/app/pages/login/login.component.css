@@ -1,0 +1,13 @@
+.form-wrapper{
+  padding-bottom:200px;
+}
+.media-footer {
+  position:fixed;;
+  bottom:0;
+  width:100%;
+}
+.mat-slider-horizontal {
+  height: 48px;
+  min-width: 128px;
+  width:100%;
+}

@@ -1,0 +1,82 @@
+<div class="container">
+  <mat-toolbar color="primary" class="main-toolbar">
+    <span>SHMApple Music</span>
+
+    <mat-menu class="float-right" color="primary" #appMenu="matMenu">
+      <a [routerLink]="['/login']" mat-menu-item *ngIf="!authService.logIn" >Войти</a>
+      <a routerLink="#" (click)="authService.logout()" mat-menu-item *ngIf="authService.logIn">Выйти</a>
+    </mat-menu>
+    <button class="float-right" mat-icon-button [matMenuTriggerFor]="appMenu">
+      <mat-icon *ngIf="!authService.logIn">lock</mat-icon>
+      <mat-icon *ngIf="authService.logIn">lock_open</mat-icon>
+    </button>
+
+  </mat-toolbar>
+  <div class="content">
+    <div class="logo">
+      <mat-icon>
+        <img class="lumen-logo" src="https://is1-ssl.mzstatic.com/image/thumb/Features62/v4/fb/55/cc/fb55cca6-a68f-ca47-326e-2a81191b5c72/mzl.mjfmrgfl.jpg/135x135cc.jpg" style="background-color: #b2b3b2;" alt="" width="135" height="135">
+      </mat-icon>
+      <div><a href="https://music.apple.com/us/artist/lumen/637838011?ign-mpt=uo%3D4" title="Lumen on Apple music" target="_blank">Lumen</a></div>
+    </div>
+    <ng-container *ngFor="let file of files; let i = index">
+      <mat-list color="primary">
+        <mat-list-item  (click)="openFile(file,i)">
+          <mat-icon class="mat-img" color="primary" mat-list-icon><img src="{{file.artworkUrl60}}" title="{{ file.artistName }}-{{ file.trackName }}" /></mat-icon>
+          <h4 mat-line>{{ file.trackName }} (Альбом: <span style="color:#b24108">{{file.collectionName}})</span></h4>
+          <h5 mat-line>by {{ file.artistName }}</h5>
+          <mat-icon color="primary" *ngIf="currentFile.index === i && !state?.error">volume_up</mat-icon>
+          <h6 *ngIf="currentFile.index === undefined && currentFile.index === i && state?.error">ERROR</h6>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </div>
+  <div class="media-footer">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        {{ state?.readableCurrentTime }}
+        <mat-slider class="time-slider" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime" (input)="onSliderChangeEnd($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+        {{ state?.readableDuration}}
+      </mat-toolbar-row>
+      <mat-toolbar-row class="media-action-bar">
+        <div *ngIf="currentFile.index === undefined; then quiet else playing"></div>
+        <ng-template #quiet><p style="font-size:16px">Плеер молчит</p></ng-template>
+        <ng-template #playing><p style="line-height:1.1;font-size:16px;white-space:normal;max-width:180px; min-width:180px;display:flex;justify-content:center">{{currentFile.file.artistName}} - {{currentFile.file.trackName}}</p></ng-template>
+
+        <button *ngIf="currentFile.index !== undefined" mat-button [disabled]="isFirstPlaying()" (click)="previous()">
+          <mat-icon mat-list-icon>skip_previous</mat-icon>
+        </button>
+        <div *ngIf="currentFile.index === undefined; then playFirst else continue"></div>
+        <ng-template #playFirst>
+          <button mat-button (click)="openFile(files[0],0)" [disabled]="state?.error" *ngIf="!state?.playing">
+            <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template #continue>
+          <button mat-button (click)="play()" [disabled]="state?.error" *ngIf="!state?.playing">
+            <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+          </button>
+        </ng-template>
+        <button mat-button (click)="pause()" *ngIf="state?.playing">
+          <mat-icon mat-list-icon>pause</mat-icon>
+        </button>
+        <div *ngIf="currentFile.index === undefined; then playFirstByNext else skipNext"></div>
+        <ng-template #playFirstByNext>
+          <button mat-button (click)="openFile(files[0], 0)" [disabled]="state?.error" *ngIf="!state?.playing">
+            <mat-icon mat-list-icon>skip_next</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template #skipNext>
+          <button  mat-button [disabled]="isLastPlaying()" (click)="next()">
+            <mat-icon mat-list-icon>skip_next</mat-icon>
+          </button>
+        </ng-template>
+        <mat-icon>volume_up</mat-icon>
+        <mat-slider class="time-slider" min="0" max="1" step="0.1" [value]="1" (input)="onSliderChangeVolume($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+</div>
+
+

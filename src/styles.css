@@ -1,0 +1,95 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.mat-list-text{
+  color:#000!important;
+  height:100%;
+  align-content: center;
+  justify-content: center;
+}
+.mat-list-item{
+  padding-top:3px;
+  padding-bottom:3px;
+  border-bottom:1px solid #000;
+}
+.float-right{
+  margin-right:0!important;
+  margin-left:auto!important;
+}
+.logo-link{
+  color:#fff;
+  text-decoration:none;
+}
+.form-wrapper{
+  padding-left:15px;
+  padding-right:15px;
+}
+.mat-form-field-underline{
+  background:grey;
+}
+.mat-input-element{
+  color:#000!important;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color: rgba(0,0,0,.5)!important;
+}
+input.mat-input-element::placeholder{
+  color:#000;
+}
+.mat-raised-button[disabled]{
+  background:grey!important;
+}
+.mat-list-item{
+  display:flex;
+  align-content: center;
+}
+.mat-img{
+  width:auto!important;
+  height:auto!important;
+}
+@media(max-width:375px) {
+  .mat-button, .mat-flat-button, .mat-icon-button, .mat-stroked-button {
+    box-sizing: border-box;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    margin: 0;
+    min-width: 24px !important;
+    line-height: 36px;
+    padding: 0px !important;
+    border-radius: 4px;
+    overflow: visible;
+  }
+
+  .mat-list-item-content img {
+    max-width: 40px;
+  }
+
+  .media-action-bar p.ng-star-inserted {
+    font-size: 12px !important;
+    max-width: 100px !important;
+    min-width: 100px !important;
+    width: 100px !important;
+  }
+
+  .mat-slider-horizontal {
+    height: 48px;
+    min-width: 100px !important;
+    margin-left: 0px !important;
+  }
+
+}

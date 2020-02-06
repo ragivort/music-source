@@ -1,0 +1,73 @@
+<div class="container login">
+  <mat-toolbar color="primary" class="main-toolbar">
+    <a class="logo-link" routerLink="">SHMApple Music</a>
+  </mat-toolbar>
+
+
+  <div class="form-wrapper">
+    <h3>Вход на сайт</h3>
+    <form (ngSubmit)="login()" #loginForm="ngForm" method="post">
+      <div>
+        <mat-form-field appearance="fill">
+          <input matInput type="text" id="username" name="name" placeholder="Логин *" [(ngModel)]="username"   required  />
+          <mat-icon matSuffix>account_circle</mat-icon>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill">
+          <input matInput type="password" id="password" name="pass" placeholder="Пароль *" [(ngModel)]="password"  required  />
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+      </div>
+      <div>
+        <button [disabled]="loginForm.invalid" mat-raised-button color="primary"  type="submit">Вход</button>
+      </div>
+    </form>
+  </div>
+  <div class="media-footer">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        {{ audioService.state?.readableCurrentTime }}
+        <mat-slider class="time-slider" min="0" [max]="audioService.state?.duration" step="1" [value]="audioService.state?.currentTime" (input)="onSliderChangeEnd($event)" [disabled]="audioService.state?.error || currentFile.index === undefined"></mat-slider>
+        {{ audioService.state?.readableDuration}}
+      </mat-toolbar-row>
+      <mat-toolbar-row class="media-action-bar">
+        <div *ngIf="currentFile.index === undefined; then quiet else playing"></div>
+        <ng-template #quiet><p style="font-size:16px">Плеер молчит</p></ng-template>
+        <ng-template #playing><p style="line-height:1.1;font-size:16px;white-space:normal;max-width:180px; min-width:180px;display:flex;justify-content:center">{{currentFile.file.artistName}} - {{currentFile.file.trackName}}</p></ng-template>
+
+        <button *ngIf="currentFile.index !== undefined" mat-button [disabled]="playerComponent.isFirstPlaying()" (click)="playerComponent.playPrevious(currentFile)">
+          <mat-icon mat-list-icon>skip_previous</mat-icon>
+        </button>
+        <div *ngIf="currentFile.index === undefined; then playFirst else continue"></div>
+        <ng-template #playFirst>
+          <button mat-button (click)="playerComponent.openFile(files[0],0)" [disabled]="audioService.state?.error" *ngIf="!audioService.state?.playing">
+            <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template #continue>
+          <button mat-button (click)="playerComponent.play()" [disabled]="audioService.state?.error" *ngIf="!audioService.state?.playing">
+            <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+          </button>
+        </ng-template>
+        <button mat-button (click)="playerComponent.pause()" *ngIf="audioService.state?.playing">
+          <mat-icon mat-list-icon>pause</mat-icon>
+        </button>
+        <div *ngIf="currentFile.index === undefined; then playFirstByNext else skipNext"></div>
+        <ng-template #playFirstByNext>
+          <button mat-button (click)="playerComponent.openFile(files[0],0)" [disabled]="audioService.state?.error" *ngIf="!audioService.state?.playing">
+            <mat-icon mat-list-icon>skip_next</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template #skipNext>
+          <button  mat-button [disabled]="playerComponent.isLastPlaying()" (click)="playerComponent.playNext(currentFile)">
+            <mat-icon mat-list-icon>skip_next</mat-icon>
+          </button>
+        </ng-template>
+        <mat-icon>volume_up</mat-icon>
+        <mat-slider class="time-slider" min="0" max="1" step="0.1" [value]="1" (input)="playerComponent.onSliderChangeVolume($event)" [disabled]="audioService.state?.error || currentFile.index === undefined"></mat-slider>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+
+</div>
