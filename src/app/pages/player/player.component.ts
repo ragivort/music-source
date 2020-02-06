@@ -39,15 +39,19 @@ export class PlayerComponent implements OnInit {
     this.audioService.playStream(previewUrl).subscribe(events => {
       if (this.authService.logIn) {
         this.state.duration = 30;
-        this.state.readableDuration = this.audioService.formatTime(this.state.duration);
+        console.log(this.state);
+        if (this.state.currentTime !== undefined && this.state.playing === false && this.currentFile.index !== this.files.length - 1) {
+          this.stop();
+          setTimeout( () => this.playNext(this.currentFile), 1000);
+        }
       } else {
         this.state.duration = 15;
-        this.state.readableDuration = this.audioService.formatTime(this.state.duration);
+        if (this.state.currentTime !== undefined && this.state.playing === false && this.currentFile.index !== this.files.length - 1) {
+          this.stop();
+          setTimeout( () => this.playNext(this.currentFile), 1000);
+        }
       }
-      if (this.state.currentTime === 0 && this.state.playing === false && this.currentFile.index !== this.files.length - 1) {
-        this.stop();
-        setTimeout( () => this.playNext(this.currentFile), 1000);
-      }
+      this.state.readableDuration = this.audioService.formatTime(this.state.duration);
     });
   }
 
